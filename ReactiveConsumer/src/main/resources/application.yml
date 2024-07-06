@@ -1,0 +1,24 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: ReactiveConsumer
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${KAFKA_URL:http://localhost:29092,http://localhost:29093}
+          producer-properties:
+            key.serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+            value.serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+          consumer-properties:
+            key.deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+            value.deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      bindings:
+        consumeStringMessage-in-0:
+          destination: testTopic
+          contentType: application/json
+          consumer:
+            concurrency: 5
+    function:
+      definition: consumeStringMessage
